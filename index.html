@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Number Guessing Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Guess the Number (1-10)</h1>
+    <div id="number">5</div>
+    <div id="result">Swipe or Tap to Guess</div>
+  </div>
+  <script src="script.js"></script>
+</body>
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #222;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  text-align: center;
+}
+
+#number {
+  font-size: 80px;
+  margin: 20px;
+}
+
+#result {
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+</style>
+<script>
+    let currentGuess = 5;
+let targetNumber = Math.floor(Math.random() * 10) + 1;
+
+const numberDiv = document.getElementById("number");
+const resultDiv = document.getElementById("result");
+
+function updateDisplay() {
+  numberDiv.textContent = currentGuess;
+}
+
+function checkGuess() {
+  if (currentGuess === targetNumber) {
+    resultDiv.textContent = "🎉 Correct!";
+  } else if (currentGuess < targetNumber) {
+    resultDiv.textContent = "⬆️ Try Higher!";
+  } else {
+    resultDiv.textContent = "⬇️ Try Lower!";
+  }
+}
+
+function incrementGuess() {
+  if (currentGuess < 10) currentGuess++;
+  updateDisplay();
+  checkGuess();
+}
+
+function decrementGuess() {
+  if (currentGuess > 1) currentGuess--;
+  updateDisplay();
+  checkGuess();
+}
+
+// Mouse gestures (click/tap)
+document.body.addEventListener("click", (e) => {
+  if (e.clientX < window.innerWidth / 2) {
+    decrementGuess(); // left half
+  } else {
+    incrementGuess(); // right half
+  }
+});
+
+// Touch gestures (mobile swipes)
+let startX = 0;
+document.body.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX;
+});
+document.body.addEventListener("touchend", (e) => {
+  let endX = e.changedTouches[0].clientX;
+  if (startX - endX > 30) {
+    decrementGuess(); // swipe left
+  } else if (endX - startX > 30) {
+    incrementGuess(); // swipe right
+  }
+});
+
+updateDisplay();
+
+
+</script>
+</html>
